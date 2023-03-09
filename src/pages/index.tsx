@@ -72,7 +72,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] p-2">
-        <section className="container grid gap-4">
+        <section className="container grid max-w-[640px] gap-4">
           <div className="flex">
             <Avatar
               src="/emir.jpeg"
