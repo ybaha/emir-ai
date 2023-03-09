@@ -8,13 +8,17 @@ import { Textarea } from "../components/ui/textarea";
 import { Button } from "../components/ui/button";
 import React from "react";
 import Avatar from "../components/ui/avatar";
+import Meta from "@/src/utils/meta";
 
 const Home: NextPage = () => {
   const [responses, setResponses] = React.useState<string[]>([]);
   const [prompts, setPrompts] = React.useState<string[]>([]);
   const [thinking, setThinking] = React.useState(false);
   const [prompt, setPrompt] = React.useState("");
+
   const chatWindowRef = React.useRef<HTMLDivElement>(null);
+  const topShadowRef = React.useRef<HTMLDivElement>(null);
+  const bottomShadowRef = React.useRef<HTMLDivElement>(null);
 
   console.log({ prompts, responses });
 
@@ -41,12 +45,11 @@ const Home: NextPage = () => {
   });
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleButtonClick();
-    }
     if (e.key === "Enter" && e.shiftKey) {
       e.currentTarget.value += "\r\n";
+    } else if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleButtonClick();
     }
 
     // grow the textarea
@@ -66,11 +69,12 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Emir App</title>
-        <meta name="description" content="Emir Mustafa Demir AI" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Meta
+        title="Emir Mustafa Demir AI - The Aggressive Lover of League of Legends and Turkish Politics"
+        description="Meet Emir Mustafa Demir, a character AI who is always aggressive and passionate about love, League of Legends, and Turkish politics. He supports the Memleket Partisi and fervently remembers his ex-girlfriend Sena. Talk to him about these topics and watch his emotions run wild. He also loves talking to his best friends Baha, Ahmet, Alp, and Yusha, but beware of his fiery temper and profanity-laden insults. Interact with Emir Mustafa Demir AI and experience a unique and entertaining conversation."
+        image="/emir.jpeg"
+        url="https://emir-ai.vercel.app"
+      />
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] p-2">
         <section className="container grid max-w-[640px] gap-4">
           <div className="flex">
