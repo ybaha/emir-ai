@@ -92,10 +92,10 @@ const Home: NextPage = () => {
           >
             {prompts.map((prompt, index) => (
               <div key={index}>
-                <div key={`p${index}`} className="p-4 text-right">
+                <div key={`p${index}`} className="p-4 text-right text-gray-400">
                   {prompt}
                 </div>
-                <div key={`r${index}`} className="p-4">
+                <div key={`r${index}`} className="p-4 text-gray-300">
                   {responses[index]}
                 </div>
               </div>
@@ -108,7 +108,11 @@ const Home: NextPage = () => {
             onChange={(e) => setPrompt(e.target.value)}
             value={prompt}
           ></Textarea>
-          <Button variant="outline" onClick={handleButtonClick}>
+          <Button
+            variant="outline"
+            onClick={handleButtonClick}
+            className="text-gray-200"
+          >
             Gonder
           </Button>
         </section>
