@@ -25,17 +25,17 @@ const Home: NextPage = () => {
   };
 
   const handleSend = api.example.sendMessage.useMutation({
-    onMutate: async (message) => {
+    onMutate: (message) => {
       setThinking(true);
     },
-    onSuccess: async (data, variables, context) => {
+    onSuccess: (data, variables, context) => {
       setResponses((prev) => [
         ...prev,
         data.choices[0]?.message?.content || "Error",
       ]);
       setThinking(false);
     },
-    onError: async (error, variables, context) => {
+    onError: (error, variables, context) => {
       setThinking(false);
     },
   });
@@ -51,7 +51,7 @@ const Home: NextPage = () => {
 
     // grow the textarea
     e.currentTarget.style.height = "auto";
-    e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
+    e.currentTarget.style.height = `${e.currentTarget.scrollHeight}`;
 
     if (!e.currentTarget.value.length) {
       e.currentTarget.style.height = "36px";
@@ -92,10 +92,10 @@ const Home: NextPage = () => {
           >
             {prompts.map((prompt, index) => (
               <div key={index}>
-                <div key={"p" + index} className="p-4 text-right">
+                <div key={`p${index}`} className="p-4 text-right">
                   {prompt}
                 </div>
-                <div key={"r" + index} className="p-4">
+                <div key={`r${index}`} className="p-4">
                   {responses[index]}
                 </div>
               </div>
