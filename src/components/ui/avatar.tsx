@@ -1,6 +1,6 @@
 import React from "react";
 
-type AvatarProps = {} & React.ImgHTMLAttributes<HTMLImageElement>;
+type AvatarProps = React.ImgHTMLAttributes<HTMLImageElement>;
 
 const Avatar = (props: AvatarProps) => {
   return (
