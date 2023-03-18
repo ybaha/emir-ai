@@ -1,8 +1,4 @@
 import { type NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
-
 import { api } from "../utils/api";
 import { Textarea } from "../components/ui/textarea";
 import { Button } from "../components/ui/button";
@@ -17,8 +13,6 @@ const Home: NextPage = () => {
   const [prompt, setPrompt] = React.useState("");
 
   const chatWindowRef = React.useRef<HTMLDivElement>(null);
-  const topShadowRef = React.useRef<HTMLDivElement>(null);
-  const bottomShadowRef = React.useRef<HTMLDivElement>(null);
 
   console.log({ prompts, responses });
 
@@ -41,6 +35,7 @@ const Home: NextPage = () => {
     },
     onError: (error, variables, context) => {
       setThinking(false);
+      console.log({ error });
     },
   });
 

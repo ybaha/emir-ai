@@ -18,6 +18,10 @@ const Meta = (props: MetaProps) => (
   <Head>
     <title>{props.title || defaults.title}</title>
     <meta
+      name="google-site-verification"
+      content="8EJsJO-ywf1TMQ5P0OUvLnfLiaAhFQqVPP8YEtLycpY"
+    />
+    <meta
       name="description"
       content={props.description || defaults.description}
     />
