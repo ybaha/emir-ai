@@ -14,8 +14,6 @@ const Home: NextPage = () => {
 
   const chatWindowRef = React.useRef<HTMLDivElement>(null);
 
-  console.log({ prompts, responses });
-
   const handleButtonClick = () => {
     handleSend.mutate({ text: prompt, prompts, responses });
     setPrompts((prev) => [...prev, prompt]);
