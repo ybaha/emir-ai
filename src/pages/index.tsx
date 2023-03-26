@@ -87,7 +87,7 @@ const Home: NextPage = () => {
           </div>
           <div
             ref={chatWindowRef}
-            className="max-h-[420px] w-full overflow-y-auto rounded-md border border-slate-200 bg-transparent dark:border-slate-700 dark:text-slate-100"
+            className="max-h-[420px] w-full overflow-y-scroll rounded-md border border-slate-200 bg-transparent dark:border-slate-700 dark:text-slate-100"
           >
             {prompts.map((prompt, index) => (
               <div key={index}>
