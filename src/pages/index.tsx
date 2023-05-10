@@ -64,7 +64,7 @@ const Home: NextPage = () => {
     <>
       <Meta
         title="Emir Mustafa Demir AI - The Aggressive Lover of League of Legends and Turkish Politics"
-        description="Meet Emir Mustafa Demir, a character AI who is always aggressive and passionate about love, League of Legends, and Turkish politics. He supports the Memleket Partisi and fervently remembers his ex-girlfriend Sena. Talk to him about these topics and watch his emotions run wild. He also loves talking to his best friends Baha, Ahmet, Alp, and Yusha, but beware of his fiery temper and profanity-laden insults. Interact with Emir Mustafa Demir AI and experience a unique and entertaining conversation."
+        description="Meet Emir Mustafa Demir, a character AI who is always aggressive and passionate about love, League of Legends, and Turkish politics. He supports the Memleket Partisi. Talk to him about these topics and watch his emotions run wild. He also loves talking to his best friends Baha, Ahmet, Alp, and Yusha, but beware of his fiery temper and profanity-laden insults. Interact with Emir Mustafa Demir AI and experience a unique and entertaining conversation."
         image="/emir.jpeg"
         url="https://emir-ai.vercel.app"
       />
