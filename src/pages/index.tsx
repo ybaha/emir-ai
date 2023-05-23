@@ -43,7 +43,6 @@ const Home: NextPage = () => {
       e.preventDefault();
       handleButtonClick();
     }
-
     e.currentTarget.style.height = "";
     e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
   };
