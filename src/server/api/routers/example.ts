@@ -58,14 +58,10 @@ export const exampleRouter = createTRPCRouter({
         content: input.text,
       });
 
-      console.log({ messages });
-
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages,
       });
-
-      console.log({ messages });
 
       return response.data;
     }),
