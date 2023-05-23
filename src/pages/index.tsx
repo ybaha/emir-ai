@@ -39,19 +39,13 @@ const Home: NextPage = () => {
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && e.shiftKey) {
-      e.currentTarget.value += "\r\n";
     } else if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleButtonClick();
     }
 
-    // grow the textarea
-    e.currentTarget.style.height = "auto";
-    e.currentTarget.style.height = `${e.currentTarget.scrollHeight}`;
-
-    if (!e.currentTarget.value.length) {
-      e.currentTarget.style.height = "36px";
-    }
+    e.currentTarget.style.height = "";
+    e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
   };
 
   React.useEffect(() => {
@@ -89,19 +83,25 @@ const Home: NextPage = () => {
           >
             {prompts.map((prompt, index) => (
               <div key={index}>
-                <div key={`p${index}`} className="p-4 text-right text-gray-400">
+                <div
+                  key={`p${index}`}
+                  className="whitespace-pre-wrap p-4 text-right text-gray-400"
+                >
                   {prompt}
                 </div>
-                <div key={`r${index}`} className="p-4 text-gray-300">
+                <div
+                  key={`r${index}`}
+                  className="whitespace-pre-wrap p-4 text-gray-300"
+                >
                   {responses[index]}
                 </div>
               </div>
             ))}
           </div>
           <Textarea
-            className="h-auto"
+            className="h-[42px] min-h-[42px]"
             placeholder="Enter your message..."
-            onKeyDown={(e) => onKeyDown(e)}
+            onKeyUp={(e) => onKeyDown(e)}
             onChange={(e) => setPrompt(e.target.value)}
             value={prompt}
           ></Textarea>
@@ -110,7 +110,7 @@ const Home: NextPage = () => {
             onClick={handleButtonClick}
             className="text-gray-200"
           >
-            Gonder
+            Send
           </Button>
         </section>
       </main>
