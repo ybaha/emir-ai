@@ -44,7 +44,7 @@ const Home: NextPage = () => {
       handleButtonClick();
     }
     e.currentTarget.style.height = "";
-    e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
+    e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
   };
 
   React.useEffect(() => {
