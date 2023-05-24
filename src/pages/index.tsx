@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select";
-import locale from "@/src/i18n.json";
+import locale from "@/src/i18n.json" assert { type: "json" };
 import { AlertDialogDemo } from "../components/ui/alert-dialog";
 import { AlertDialog } from "../components/ui/alert-dialog";
 import { AlertDialogTrigger } from "../components/ui/alert-dialog";
@@ -42,10 +42,8 @@ const Home: NextPage = () => {
   }, []);
 
   // TODO: :P
-  const t = (str: string) => {
-    console.log(language);
-    console.log((locale as any)[language]);
-    return (locale as any)[language][str];
+  const t = (str: keyof typeof locale.en) => {
+    return locale[language as "tr" | "en"][str];
   };
 
   const chatWindowRef = React.useRef<HTMLDivElement>(null);
