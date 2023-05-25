@@ -5,6 +5,7 @@ import { Button } from "../components/ui/button";
 import React from "react";
 import Avatar from "../components/ui/avatar";
 import Meta from "@/src/utils/meta";
+import locale from "@/src/i18n.json" assert { type: "json" };
 import {
   Select,
   SelectContent,
@@ -14,17 +15,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select";
-import locale from "@/src/i18n.json" assert { type: "json" };
-import { AlertDialogDemo } from "../components/ui/alert-dialog";
-import { AlertDialog } from "../components/ui/alert-dialog";
-import { AlertDialogTrigger } from "../components/ui/alert-dialog";
-import { AlertDialogContent } from "../components/ui/alert-dialog";
-import { AlertDialogHeader } from "../components/ui/alert-dialog";
-import { AlertDialogTitle } from "../components/ui/alert-dialog";
-import { AlertDialogDescription } from "../components/ui/alert-dialog";
-import { AlertDialogFooter } from "../components/ui/alert-dialog";
-import { AlertDialogCancel } from "../components/ui/alert-dialog";
-import { AlertDialogAction } from "../components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogDescription,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../components/ui/alert-dialog";
+import { log } from "console";
+import { set } from "zod";
 
 const Home: NextPage = () => {
   const [responses, setResponses] = React.useState<string[]>([]);
@@ -32,14 +32,7 @@ const Home: NextPage = () => {
   const [thinking, setThinking] = React.useState(false);
   const [prompt, setPrompt] = React.useState("");
   const [language, setLanguage] = React.useState("tr");
-  const [isMobile, setIsMobile] = React.useState(false);
   const [settingsOpen, setSettingsOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsMobile(window.innerWidth <= 640);
-    }
-  }, []);
 
   // TODO: :P
   const t = (str: keyof typeof locale.en) => {
@@ -49,6 +42,9 @@ const Home: NextPage = () => {
   const chatWindowRef = React.useRef<HTMLDivElement>(null);
 
   const handleButtonClick = () => {
+    if (!prompt.length || prompt === "\n") return setPrompt("");
+    if (thinking) return;
+
     handleSend.mutate({ text: prompt, prompts, responses });
     setPrompts((prev) => [...prev, prompt]);
     setPrompt("");
@@ -75,7 +71,7 @@ const Home: NextPage = () => {
     e.currentTarget.style.height = "";
     e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
 
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (!e.shiftKey && e.key === "Enter") {
       e.preventDefault();
       handleButtonClick();
       e.currentTarget.style.height = "0";
@@ -94,7 +90,7 @@ const Home: NextPage = () => {
         title="Emir Mustafa Demir AI - The Aggressive Lover of League of Legends and Turkish Politics"
         description="Meet Emir Mustafa Demir, a character AI who is always aggressive and passionate about love, League of Legends, and Turkish politics. He supports the Memleket Partisi. Talk to him about these topics and watch his emotions run wild. He also loves talking to his best friends Baha, Ahmet, Alp, and Yusha, but beware of his fiery temper and profanity-laden insults. Interact with Emir Mustafa Demir AI and experience a unique and entertaining conversation."
         image="/emir.jpeg"
-        url="https://emir-ai.vercel.app"
+        url="https://emirmustafademirai.lol"
       />
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] p-2">
         <section className="container grid max-w-[640px] gap-4">
@@ -156,22 +152,53 @@ const Home: NextPage = () => {
               ref={chatWindowRef}
               className="relative h-[calc(100vh-200px)] w-full overflow-y-scroll rounded-md border border-slate-200 bg-transparent pb-12 dark:border-slate-700 dark:text-slate-100"
             >
-              {prompts.map((prompt, index) => (
-                <div key={index}>
-                  <div
-                    key={`p${index}`}
-                    className="whitespace-pre-wrap p-4 text-right text-gray-400"
-                  >
-                    {prompt}
+              {prompts.map((prompt, index) => {
+                const isLast = index === prompts.length - 1;
+                return (
+                  <div key={index} className="flex w-full flex-col">
+                    <div
+                      key={`p${index}`}
+                      className="max-w-[80%] self-end whitespace-pre-wrap p-4 text-white"
+                    >
+                      <div className="rounded-xl rounded-br-none bg-purple-600 px-4 py-2">
+                        {prompt}
+                      </div>
+                    </div>
+                    <div
+                      key={`r${index}`}
+                      className="max-w-[80%] self-start whitespace-pre-wrap p-4 text-gray-300"
+                    >
+                      <div className="rounded-xl rounded-bl-none bg-slate-900 px-4 py-2 text-gray-300">
+                        {isLast && thinking ? (
+                          <span>
+                            {t("typing")}{" "}
+                            <div
+                              className="inline-block animate-bounce"
+                              style={{ animationDelay: "100ms" }}
+                            >
+                              .
+                            </div>
+                            <div
+                              className="inline-block animate-bounce"
+                              style={{ animationDelay: "200ms" }}
+                            >
+                              .
+                            </div>
+                            <div
+                              className="inline-block animate-bounce"
+                              style={{ animationDelay: "300ms" }}
+                            >
+                              .
+                            </div>
+                          </span>
+                        ) : (
+                          responses[index]
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div
-                    key={`r${index}`}
-                    className="whitespace-pre-wrap p-4 text-gray-300"
-                  >
-                    {responses[index]}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="absolute bottom-0 left-0 z-10 flex w-full items-end rounded-b-md bg-[#00000081] py-2 backdrop-blur-lg ">
               <Textarea
