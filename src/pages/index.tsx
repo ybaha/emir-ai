@@ -36,7 +36,7 @@ const Home: NextPage = () => {
 
   // TODO: use a proper i18n solution :P
   const t = (str: keyof typeof locale.en) => {
-    return locale[language as "tr" | "en"][str];
+    return locale[language][str];
   };
 
   const chatWindowRef = React.useRef<HTMLDivElement>(null);
