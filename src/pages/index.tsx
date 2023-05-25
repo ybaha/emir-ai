@@ -30,6 +30,7 @@ const Home: NextPage = () => {
   const [thinking, setThinking] = React.useState(false);
   const [prompt, setPrompt] = React.useState("");
   const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const [error, setError] = React.useState(false);
 
   const { language, setLanguage } = useSettings();
 
@@ -54,11 +55,14 @@ const Home: NextPage = () => {
       setThinking(true);
     },
     onSuccess: (data) => {
+      setError(false);
       setResponses((prev) => [...prev, data.choices[0]?.message?.content || "Error"]);
       setThinking(false);
     },
     onError: (error) => {
       setThinking(false);
+      setError(true);
+      setResponses((prev) => [...prev, t("error")]);
       console.log({ error });
     },
   });

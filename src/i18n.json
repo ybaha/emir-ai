@@ -4,13 +4,15 @@
     "enter-message": "Mesajınızı girin",
     "send": "Gönder",
     "typing": "Yazıyor",
-    "first-message": "Merhaba, ben Emir. Sana nasıl yardımcı olabilirim?"
+    "first-message": "Merhaba, ben Emir. Sana nasıl yardımcı olabilirim?",
+    "error": "Bir hata oluştu. Lütfen daha sonra tekrar dene."
   },
   "en": {
     "emir-thinking": "Emir is thinking...",
     "enter-message": "Enter your message",
     "send": "Send",
     "typing": "Typing",
-    "first-message": "Hello, I'm Emir. How can I help you?"
+    "first-message": "Hello, I'm Emir. How can I help you?",
+    "error": "An error occurred. Please try again later."
   }
 }
