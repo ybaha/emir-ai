@@ -11,7 +11,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select";
@@ -23,18 +22,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../components/ui/alert-dialog";
-import { log } from "console";
-import { set } from "zod";
+import { useSettings } from "../stores/settings";
 
 const Home: NextPage = () => {
   const [responses, setResponses] = React.useState<string[]>([]);
   const [prompts, setPrompts] = React.useState<string[]>([]);
   const [thinking, setThinking] = React.useState(false);
   const [prompt, setPrompt] = React.useState("");
-  const [language, setLanguage] = React.useState("tr");
   const [settingsOpen, setSettingsOpen] = React.useState(false);
 
-  // TODO: :P
+  const { language, setLanguage } = useSettings();
+
+  // TODO: use a proper i18n solution :P
   const t = (str: keyof typeof locale.en) => {
     return locale[language as "tr" | "en"][str];
   };
@@ -45,20 +44,17 @@ const Home: NextPage = () => {
     if (!prompt.length || prompt === "\n") return setPrompt("");
     if (thinking) return;
 
-    handleSend.mutate({ text: prompt, prompts, responses });
+    handleSend.mutate({ text: prompt, prompts, responses, language });
     setPrompts((prev) => [...prev, prompt]);
     setPrompt("");
   };
 
-  const handleSend = api.example.sendMessage.useMutation({
+  const handleSend = api.gpt.sendMessage.useMutation({
     onMutate: (message) => {
       setThinking(true);
     },
-    onSuccess: (data, variables, context) => {
-      setResponses((prev) => [
-        ...prev,
-        data.choices[0]?.message?.content || "Error",
-      ]);
+    onSuccess: (data) => {
+      setResponses((prev) => [...prev, data.choices[0]?.message?.content || "Error"]);
       setThinking(false);
     },
     onError: (error) => {
@@ -67,7 +63,7 @@ const Home: NextPage = () => {
     },
   });
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const onKeyUp = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     e.currentTarget.style.height = "";
     e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
 
@@ -92,7 +88,7 @@ const Home: NextPage = () => {
         image="/emir.jpeg"
         url="https://emirmustafademirai.lol"
       />
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] p-2">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-800 to-slate-900 p-2">
         <section className="container grid max-w-[640px] gap-4">
           <div className="flex">
             <div className="flex items-center">
@@ -118,19 +114,15 @@ const Home: NextPage = () => {
                   className="bg-[#00000087] text-gray-300"
                 >
                   <AlertDialogHeader>
-                    <AlertDialogTitle className="text-left">
-                      Settings
-                    </AlertDialogTitle>
+                    <AlertDialogTitle className="text-left">Settings</AlertDialogTitle>
                   </AlertDialogHeader>
                   <AlertDialogDescription>
                     <div className="flex flex-col gap-2">
                       <div className="flex flex-col gap-1">
-                        <Select onValueChange={(e) => setLanguage(e)}>
+                        <Select onValueChange={(e) => setLanguage(e as "en" | "tr")}>
                           <SelectTrigger className=" w-[108px] border-slate-700 text-gray-300">
                             <SelectValue
-                              placeholder={
-                                language === "tr" ? "Türkçe 🇹🇷" : "English 🇬🇧"
-                              }
+                              placeholder={language === "tr" ? "Türkçe 🇹🇷" : "English 🇬🇧"}
                             />
                           </SelectTrigger>
                           <SelectContent className="bg-[#0000007b] backdrop-blur-sm">
@@ -150,8 +142,13 @@ const Home: NextPage = () => {
           <div className="relative">
             <div
               ref={chatWindowRef}
-              className="relative h-[calc(100vh-200px)] w-full overflow-y-scroll rounded-md border border-slate-200 bg-transparent pb-12 dark:border-slate-700 dark:text-slate-100"
+              className="relative h-[calc(100vh-200px)] w-full overflow-y-scroll rounded-md border border-slate-200 bg-transparent pb-16 dark:border-slate-700 dark:text-slate-100"
             >
+              <div className="max-w-[80%] self-start whitespace-pre-wrap p-4 text-gray-300">
+                <div className="rounded-xl rounded-bl-none bg-blue-700 px-4 py-2 text-gray-300">
+                  {t("first-message")}
+                </div>
+              </div>
               {prompts.map((prompt, index) => {
                 const isLast = index === prompts.length - 1;
                 return (
@@ -168,7 +165,7 @@ const Home: NextPage = () => {
                       key={`r${index}`}
                       className="max-w-[80%] self-start whitespace-pre-wrap p-4 text-gray-300"
                     >
-                      <div className="rounded-xl rounded-bl-none bg-slate-900 px-4 py-2 text-gray-300">
+                      <div className="rounded-xl rounded-bl-none bg-blue-700 px-4 py-2 text-gray-300">
                         {isLast && thinking ? (
                           <span>
                             {t("typing")}{" "}
@@ -200,23 +197,18 @@ const Home: NextPage = () => {
                 );
               })}
             </div>
-            <div className="absolute bottom-0 left-0 z-10 flex w-full items-end rounded-b-md bg-[#00000081] py-2 backdrop-blur-lg ">
+            <div className="absolute bottom-0 left-0 z-10 mx-px mb-px flex w-[calc(100%-2px)] items-end rounded-b-md bg-[#00000081] py-2 backdrop-blur-lg ">
               <Textarea
-                className="h-[42px] max-h-[200px] min-h-[42px] w-full resize-none outline-none focus:border-none focus:outline-none"
+                className="h-[42px] max-h-[200px]  min-h-[42px] w-full resize-none outline-none focus:border-none focus:outline-none"
                 placeholder={t("enter-message")}
-                onKeyUp={(e) => onKeyDown(e)}
+                onKeyUp={(e) => onKeyUp(e)}
                 onChange={(e) => {
                   setPrompt(e.target.value);
-                  if (e.currentTarget.value === "")
-                    e.currentTarget.style.height = "";
+                  if (e.currentTarget.value === "") e.currentTarget.style.height = "";
                 }}
                 value={prompt}
               ></Textarea>
-              <Button
-                variant="outline"
-                onClick={handleButtonClick}
-                className="text-gray-200"
-              >
+              <Button variant="outline" onClick={handleButtonClick} className="mr-2 text-gray-200">
                 {t("send")}
               </Button>
             </div>
