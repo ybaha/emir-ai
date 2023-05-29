@@ -9,7 +9,7 @@ type Settings = {
 export const useSettings = create(
   persist<Settings>(
     (set) => ({
-      language: "tr",
+      language: "en",
       setLanguage: (language) => set({ language }),
     }),
     {
