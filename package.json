@@ -31,6 +31,7 @@
     "pusher-js": "^8.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "superjson": "1.9.1",
     "tailwind-merge": "^1.10.0",
     "tailwindcss-animate": "^1.0.5",
